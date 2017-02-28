@@ -70,7 +70,7 @@
 /* 0 */
 /***/ (function(module, exports) {
 
-class DOMNodes {  
+class DOMNodes {
   constructor(nodes) {
     this.nodes = nodes;
   }
@@ -189,7 +189,7 @@ class DOMNodes {
       }
     });
 
-    return this.nodes;
+    return new DOMNodes(this.nodes);
   }
 
   off(event) {
@@ -203,7 +203,7 @@ class DOMNodes {
       cbs = [];
     });
 
-    return this.nodes;
+    return new DOMNodes(this.nodes);
   }
 }
 
@@ -231,11 +231,66 @@ window.$$ = function (arg) {
       if (arg instanceof HTMLElement)
         return new DOMNodes([arg]);
   }
-}
+};
+
+$$.extend = (target, ...objects) => {
+  objects.forEach(obj => {
+    for (let el in obj)
+      target[el] = obj[el];
+  });
+
+  return target;
+};
+
+$$.ajax = options => {
+  const req = new XMLHttpRequest();
+
+  const defaults = {
+    contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+    method: 'GET',
+    url: '',
+    data: {},
+    success: () => {},
+    error: () => {}
+  };
+
+  options = $$.extend(defaults, options);
+  options.method = options.method.toUpperCase();
+
+  if (options.method === 'GET' && Object.keys(options.data).length > 0)
+    options.url += '?' + _generateQuery(options.data);
+
+  return new Promise((resolve, reject) => {
+    req.open(options.method, options.url, true);
+
+    req.onload = event => {
+      if (req.status === 200) {
+        options.success(req.response);
+        resolve(req.response);
+      } else {
+        options.error(req.response);
+        reject(req.response);
+      }
+    };
+
+    req.send(JSON.stringify(options.data));
+  });
+};
+
+_generateQuery = data => {
+  let query = '';
+
+  for (let el in data) {
+    if (data.hasOwnProperty(el))
+      query += el + '=' + data[el] + '&';
+  }
+
+  return query.substring(0, data.length - 1);
+};
 
 _registerDocReadyCB = cb => {
   _docReady ? cb() : _docReadyCBs.push(cb);
-}
+};
 
 _generateNodes = selector => {
   let query = document.querySelectorAll(selector);
