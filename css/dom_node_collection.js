@@ -81,9 +81,11 @@ class DOMNodes {
   }
 
   remove() {
-    this.nodes.forEach(el => {
-      el.remove();
-    });
+    debugger
+    const removedNodes = this.nodes.slice(0);
+    debugger
+    this.each(el => el.remove());
+    return removedNodes;
   }
 
   on(event, callback) {

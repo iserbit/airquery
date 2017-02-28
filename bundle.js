@@ -67,24 +67,165 @@
 /******/ })
 /************************************************************************/
 /******/ ([
-/* 0 */,
+/* 0 */
+/***/ (function(module, exports) {
+
+class DOMNodes {  
+  constructor(nodes) {
+    this.nodes = nodes;
+  }
+
+  each(cb) {
+    this.nodes.forEach(cb);
+  }
+
+  html(string) {
+    if (string !== undefined) {
+      this.each(node => node.innerHTML = string);
+    } else {
+      return this.nodes[0].innerHTML;
+    }
+  }
+
+  empty() {
+    this.each(node => node.innerHTML = '');
+  }
+
+  append(els) {
+    if (this.nodes.length === 0) return;
+
+    if (typeof els === 'object' && !(els instanceof DOMNodes)) {
+      els = $$(els);
+    };
+
+    switch (typeof els) {
+      case 'object':
+        if (els instanceof DOMNodes) {
+          this.each(node => {
+            els.each(el => (node.appendChild(el.cloneNode(true))))
+          });
+        };
+        return;
+
+      case 'string':
+        this.each(node => node.innerHTML += els);
+        return;
+    }
+  }
+
+  attr(name, value) {
+    if (value === undefined) {
+      return this.nodes[0].getAttribute(name);
+    } else {
+      this.nodes[0].setAttribute(name, value);
+    }
+  }
+
+  addClass(className) {
+    this.each(node => node.classList.add(className));
+  }
+
+  removeClass(className) {
+    this.each(node => node.classList.remove(className));
+  }
+
+  toggleClass(className) {
+    this.each(node => node.classList.toggle(className));
+  }
+
+  children() {
+    const children = [];
+
+    this.each(node => {
+      for (let i = 0; i < node.children.length; i++)
+        children.push(node.children[i]);
+    });
+
+    return new DOMNodes(children);
+  }
+
+  parent() {
+    const parents = [];
+
+    this.each(node => {
+      const parent = node.parentNode;
+
+      if (!parents.includes(parent))
+        parents.push(parent);
+    });
+
+    return new DOMNodes(parents);
+  }
+
+  find(query) {
+    const found = [];
+
+    this.each(node => {
+      const els = node.querySelectorAll(query);
+
+      for (let i = 0; i < els.length; i++)
+        found.push(els[i]);
+    });
+
+    return new DOMNodes(found);
+  }
+
+  remove() {
+    const removed = this.nodes.slice(0);
+    this.each(node => node.remove());
+    return removed;
+  }
+
+  on(event, cb) {
+    this.each(node => {
+      node.addEventListener(event, cb);
+
+      const eventEntry = `aqEvents-${event}`;
+
+      if (node[eventEntry] === undefined) {
+        node[eventEntry] = [cb];
+      } else {
+        node[eventEntry].push(cb);
+      }
+    });
+
+    return this.nodes;
+  }
+
+  off(event) {
+    this.each(node => {
+      const eventEntry = `aqEvents-${event}`;
+      let cbs = node[eventEntry];
+
+      if (cbs)
+        cbs.forEach(cb => node.removeEventListener(event, cb));
+
+      cbs = [];
+    });
+
+    return this.nodes;
+  }
+}
+
+module.exports = DOMNodes;
+
+
+/***/ }),
 /* 1 */
 /***/ (function(module, exports, __webpack_require__) {
 
-const DOMNodes = __webpack_require__(2);
+const DOMNodes = __webpack_require__(0);
 
-const _documentReadyCallbacks = [];
-let _documentReady = false;
-
-// Generator Function
+const _docReadyCBs = [];
+let _docReady = false;
 
 window.$$ = function (arg) {
   switch (typeof(arg)) {
     case 'string':
-      return _generateNodeCollection(arg);
+      return _generateNodes(arg);
 
     case 'function':
-      return;
+      return _registerDocReadyCB(arg);
 
     case 'object':
       if (arg instanceof HTMLElement)
@@ -92,134 +233,20 @@ window.$$ = function (arg) {
   }
 }
 
-// HELPER METHODS
-
-_generateNodeCollection = selector => {
-  let query = document.querySelectorAll(selector);
-  let elements = Array.from(query);
-  return new DOMNodes(elements);
-};
-
-
-/***/ }),
-/* 2 */
-/***/ (function(module, exports) {
-
-class DOMNodeCollection {
-  constructor(HTMLElements) {
-    this.HTMLElements = HTMLElements;
-  }
-
-  each(cb) {
-    this.HTMLElements.forEach(cb);
-  }
-
-  html(string) {
-    if (string !== undefined) {
-      this.each(el => el.innerHTML = string);
-    } else {
-      return this.HTMLElements[0].innerHTML;
-    }
-  }
-
-  empty() {
-    this.each(el => el.innerHTML = '');
-  }
-
-  append(element) {
-    this.each(el => el.innerHTML += element);
-  }
-
-  attr(name, value) {
-    if (value === undefined) {
-      return this.HTMLElements[0].getAttribute(name);
-    } else {
-      this.HTMLElements[0].setAttribute(name, value);
-    }
-  }
-
-  addClass(className) {
-    this.each(el => el.classList.add(className));
-  }
-
-  removeClass(className) {
-    this.each(el => el.classList.remove(className));
-  }
-
-  toggleClass(className) {
-    this.each(el => el.classList.toggle(className));
-  }
-
-  children() {
-    const children = [];
-
-    this.each(el => {
-      for (let i = 0; i < el.children.length; i++)
-        children.push(el.children[i]);
-    });
-
-    return new DOMNodeCollection(children);
-  }
-
-  parent() {
-    const parents = [];
-
-    this.each(el => {
-      const parent = el.parentNode;
-
-      if (!parents.includes(parent))
-        parents.push(parent);
-    });
-
-    return new DOMNodeCollection(parents);
-  }
-
-  find(query) {
-    const found = [];
-
-    this.each(el => {
-      const els = el.querySelectorAll(query);
-
-      for (let i = 0; i < els.length; i++)
-        found.push(els[i]);
-    });
-
-    return new DOMNodeCollection(found);
-  }
-
-  remove() {
-    this.HTMLElements.forEach(el => {
-      el.remove();
-    });
-  }
-
-  on(event, callback) {
-    this.HTMLElements.forEach(el => {
-      el.addEventListener("click", callback);
-
-      let eventType = event + "-type";
-
-      if (el[eventType] === undefined) {
-        el[eventType] = [callback];
-      } else {
-        el[eventType].push(callback);
-      }
-    });
-  }
-
-  off(event) {
-    this.HTMLElements.forEach(el => {
-      let eventType = event + "-type";
-      let callbacks = el[eventType];
-
-      callbacks.forEach(cb => {
-        el.removeEventListener(event, cb);
-      });
-    });
-  }
+_registerDocReadyCB = cb => {
+  _docReady ? cb() : _docReadyCBs.push(cb);
 }
 
-module.exports = DOMNodeCollection;
+_generateNodes = selector => {
+  let query = document.querySelectorAll(selector);
+  let nodes = Array.from(query);
+  return new DOMNodes(nodes);
+};
+
+document.addEventListener('DOMContentLoaded', () => {
+  _docReady = true;
+  _docReadyCBs.forEach(cb => cb());
+});
 
 
 /***/ })

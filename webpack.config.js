@@ -1,5 +1,5 @@
 module.exports = {
-    entry: "./lib/main.js",
+    entry: "./lib/airquery.js",
     output: {
         path: __dirname,
         filename: "bundle.js"
