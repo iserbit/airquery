@@ -67,13 +67,47 @@
 /******/ })
 /************************************************************************/
 /******/ ([
-/* 0 */
+/* 0 */,
+/* 1 */
+/***/ (function(module, exports, __webpack_require__) {
+
+const DOMNodes = __webpack_require__(2);
+
+const _documentReadyCallbacks = [];
+let _documentReady = false;
+
+// Generator Function
+
+window.$$ = function (arg) {
+  switch (typeof(arg)) {
+    case 'string':
+      return _generateNodeCollection(arg);
+
+    case 'function':
+      return;
+
+    case 'object':
+      if (arg instanceof HTMLElement)
+        return new DOMNodes([arg]);
+  }
+}
+
+// HELPER METHODS
+
+_generateNodeCollection = selector => {
+  let query = document.querySelectorAll(selector);
+  let elements = Array.from(query);
+  return new DOMNodes(elements);
+};
+
+
+/***/ }),
+/* 2 */
 /***/ (function(module, exports) {
 
 class DOMNodeCollection {
   constructor(HTMLElements) {
     this.HTMLElements = HTMLElements;
-    this.firstElement = this.HTMLElements[0];
   }
 
   each(cb) {
@@ -84,7 +118,7 @@ class DOMNodeCollection {
     if (string !== undefined) {
       this.each(el => el.innerHTML = string);
     } else {
-      return this.firstElement.innerHTML;
+      return this.HTMLElements[0].innerHTML;
     }
   }
 
@@ -98,60 +132,58 @@ class DOMNodeCollection {
 
   attr(name, value) {
     if (value === undefined) {
-      return this.firstElement.getAttribute(name);
+      return this.HTMLElements[0].getAttribute(name);
     } else {
-      this.firstElement.setAttribute(name, value);
+      this.HTMLElements[0].setAttribute(name, value);
     }
   }
 
   addClass(className) {
-    this.HTMLElements.forEach(el => {
-      el.classList.add(className);
-    });
+    this.each(el => el.classList.add(className));
   }
 
   removeClass(className) {
-    this.HTMLElements.forEach(el => {
-      el.classList.remove(className);
-    });
+    this.each(el => el.classList.remove(className));
   }
 
   toggleClass(className) {
-    this.HTMLElements.forEach(el => {
-      el.classList.toggle(className);
-    });
+    this.each(el => el.classList.toggle(className));
   }
 
   children() {
-    let all_children = [];
-    this.HTMLElements.forEach(el => {
-      for (let i = 0; i < el.children.length; i++) {
-        all_children.push(el.children[i]);
-      }
+    const children = [];
+
+    this.each(el => {
+      for (let i = 0; i < el.children.length; i++)
+        children.push(el.children[i]);
     });
-    return new DOMNodeCollection(all_children);
+
+    return new DOMNodeCollection(children);
   }
 
   parent() {
-    let all_parent = [];
-    this.HTMLElements.forEach(el => {
-      let parent = el.parentNode;
+    const parents = [];
 
-      if (!all_parent.includes(parent)) {
-        all_parent.push(parent);
-      }
+    this.each(el => {
+      const parent = el.parentNode;
+
+      if (!parents.includes(parent))
+        parents.push(parent);
     });
-    return new DOMNodeCollection(all_parent);
+
+    return new DOMNodeCollection(parents);
   }
 
   find(query) {
-    let found = [];
-    this.HTMLElements.forEach(el => {
-      let elements = el.querySelectorAll(query);
-      for (let i = 0; i < elements.length; i++) {
-        found.push(elements[i]);
-      }
+    const found = [];
+
+    this.each(el => {
+      const els = el.querySelectorAll(query);
+
+      for (let i = 0; i < els.length; i++)
+        found.push(els[i]);
     });
+
     return new DOMNodeCollection(found);
   }
 
@@ -188,40 +220,6 @@ class DOMNodeCollection {
 }
 
 module.exports = DOMNodeCollection;
-
-
-/***/ }),
-/* 1 */
-/***/ (function(module, exports, __webpack_require__) {
-
-const DOMNodeCollection = __webpack_require__(0);
-
-const _documentReadyCallbacks = [];
-let _documentReady = false;
-
-// Generator Function
-
-window.$$ = function (arg) {
-  switch (typeof(arg)) {
-    case 'string':
-      return _generateNodeCollection(arg);
-
-    case 'function':
-      return;
-
-    case 'object':
-      if (arg instanceof HTMLElement)
-        return new DOMNodeCollection([arg]);
-  }
-}
-
-// HELPER METHODS
-
-_generateNodeCollection = selector => {
-  let query = document.querySelectorAll(selector);
-  let elements = Array.from(query);
-  return new DOMNodeCollection(elements);
-};
 
 
 /***/ })
