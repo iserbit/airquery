@@ -8,19 +8,21 @@ Airquery is a lightweight Javascript DOM manipulation library that implements on
 
 ##### `$$`
 - Can accept a string selector
-  ```
+  ```javascript
   const heading = $$('h1');
   ```
 
 - Can accept a function to be added as Ready callbacks
-  ```
+
+  ```javascript
   const status = () => console.log('loaded');
   $$(status);
   ```
 
 ##### `extend`
 - Merges objects
-  ```
+
+  ```javascript
   const objA = {a: 'a', b: 'a', c: 'a'};
   const objB = {b: 'b', c: 'b'};
   const objC = {c: 'c'};
@@ -30,7 +32,8 @@ Airquery is a lightweight Javascript DOM manipulation library that implements on
 
 ##### `ajax`
 - Creates an asynchronous call and returns a `Promise`
-  ```
+
+  ```javascript
   const call = $$.ajax({
     method: 'get',
     url: 'http://httpbin.org/',
