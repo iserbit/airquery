@@ -2,6 +2,16 @@
 
 Airquery is a lightweight Javascript DOM manipulation library that implements only essential function in order to reduce file size and loading speed.
 
+## Installation
+
+To use Airquery, download the `/lib` folder of the repository into your project Javascript folder.
+
+Add the following script tag in the header:
+
+```html
+  <script src='./lib/airquery.js' charset='utf-8' />
+```
+
 ## Usage
 
 ### Object Methods
@@ -48,8 +58,9 @@ Airquery is a lightweight Javascript DOM manipulation library that implements on
 
 ##### `html(string)`
 - Sets the content of the element
+
   ```javascript
-  $$('h1').html('Heading 1'); // <h1>Heading 1</h1>
+    $$('h1').html('Heading 1'); // <h1>Heading 1</h1>
   ```
 
 ##### `empty()`
