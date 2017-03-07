@@ -16,7 +16,7 @@ const page = () => {
   const currentCity = 'New York City';
 
   pageContainer.addClass('center');
-ss DOMNodes {
+
   title.html('Weather AJAX - AirQuery Demo')
        .addClass('heading');
 
