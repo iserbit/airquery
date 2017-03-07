@@ -2,33 +2,24 @@
 <html>
   <head>
     <meta charset="utf-8">
-    <title>Airquery</title>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
-    <script type="text/javascript" src='bundle.js'></script>
+    <title>Weather - AirQuery Demo</title>
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet">
+    <link rel="stylesheet" href="./style/weather.css">
+
+    <script type="text/javascript" src='./lib/airquery.min.js'></script>
+    <script type="text/javascript" src='./demo/weather.js'></script>
   </head>
   <body>
-    <h1>Airquery</h1>
-    it werks
-    <ul name="a" class="reg-class a-class">
-      <li class='a-class'>a - li element 1</li>
-      <li class='a-class'>a - li element 2</li>
-      <li>a - li element 3</li>
-    </ul>
-
-    <ul name="b" class="reg-class">
-      <li class='b-class'>b - li element 1</li>
-      <li>b - li element 2</li>
-      <li>b - li element 3</li>
-    </ul>
-
-    <ul name="c">
-      <li class="a-class">c - li element 1</li>
-      <li>c - li element 2</li>
-      <li>c - li element 3</li>
-    </ul>
-
-    <h1>
-      <li>H1 li</li>
-    </h1>
+    <div class='page-container'>
+      <h1></h1>
+      <h2></h2>
+      <div class='weather-container'>
+        <h4 class='weather'></h4>
+        <h4 class='current-temperature'></h4>
+        <h4 class='max-temperature'></h4>
+        <h4 class='min-temperature'></h4>
+        <h4 class='humidity'></h4>
+      </div>
+    </div>
   </body>
 </html>
