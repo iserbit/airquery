@@ -29,8 +29,14 @@ h4 {
   font-weight: 400;
   padding: 5px;
 }
+
+img {
+  width: 150px;
+  margin: 25px;
+}
+
 .page-container {
-  padding: 50px;
+  padding: 25px 50px;
   background-color: rgba(0, 0, 0, 0.6);
 }
 
