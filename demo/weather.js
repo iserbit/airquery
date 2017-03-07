@@ -32,11 +32,11 @@ const page = () => {
     method: 'get',
     url
   }).then((data) => {
-    weather.html(`<b>${data.weather[0].main}</b>`);
-    currentTemperature.html(`<b>Current Temperature</b><br><br>${data.main.temp}`);
-    maxTemperature.html(`<b>Max Temperature</b><br><br>${data.main.temp_max}`);
-    minTemperature.html(`<b>Min Temperature</b><br><br>${data.main.temp_min}`);
-    humidity.html(`<b>Humidity</b><br><br>${data.main.humidity}%`);
+    weather.html(`<b>Current Weather</b><br>${data.weather[0].main}`);
+    currentTemperature.html(`<b>Current Temperature</b><br>${data.main.temp}<br>`);
+    maxTemperature.html(`<b>Max Temperature</b><br>${data.main.temp_max}<br>`);
+    minTemperature.html(`<b>Min Temperature</b><br>${data.main.temp_min}<br>`);
+    humidity.html(`<b>Humidity</b><br>${data.main.humidity}%`);
   });
 }
 

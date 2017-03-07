@@ -1,12 +1,43 @@
 body {
   font-family: 'Montserrat';
+  margin: 0;
+  padding: 0;
+  background-image: url('../assets/background.jpg');
+  background-position: right;
+  height: 100vh;
+  width: 100vw;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+
+  color: white;
+}
+
+h1, h2, h3, h4 {
+  padding: 0;
+  margin: 0;
+}
+
+h2 {
+  padding-bottom: 25px;
+  color: #ffd400;
 }
 
 h4 {
+  font-size: 20px;
   font-weight: 400;
+  padding: 5px;
+}
+.page-container {
+  padding: 50px;
+  background-color: rgba(0, 0, 0, 0.6);
 }
 
 .heading {
+  color: rgb(140, 255, 68);
+  padding-top: 0px;
+  padding-bottom: 25px;
   font-size: 30px;
   font-weight: bold;
 }
