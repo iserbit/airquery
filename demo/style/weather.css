@@ -1,0 +1,16 @@
+body {
+  font-family: 'Montserrat';
+}
+
+h4 {
+  font-weight: 400;
+}
+
+.heading {
+  font-size: 30px;
+  font-weight: bold;
+}
+
+.center {
+  text-align: center;
+}

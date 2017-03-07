@@ -1,3 +1,92 @@
+const _docReadyCBs = [];
+let _docReady = false;
+
+window.$$ = function (arg) {
+  switch (typeof(arg)) {
+    case 'string':
+      return _generateNodes(arg);
+
+    case 'function':
+      return _registerDocReadyCB(arg);
+
+    case 'object':
+      if (arg instanceof HTMLElement)
+        return new DOMNodes([arg]);
+  }
+};
+
+$$.extend = (target, ...objects) => {
+  objects.forEach(obj => {
+    for (let el in obj)
+      target[el] = obj[el];
+  });
+
+  return target;
+};
+
+$$.ajax = options => {
+  const req = new XMLHttpRequest();
+
+  const defaults = {
+    contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+    method: 'GET',
+    url: '',
+    data: {},
+    success: () => {},
+    error: () => {}
+  };
+
+  options = $$.extend(defaults, options);
+  options.method = options.method.toUpperCase();
+
+  if (options.method === 'GET' && Object.keys(options.data).length > 0)
+    options.url += '?' + _generateQuery(options.data);
+
+  return new Promise((resolve, reject) => {
+    req.open(options.method, options.url, true);
+
+    req.onload = event => {
+      if (req.status === 200) {
+        const res = JSON.parse(req.response);
+        options.success(res);
+        resolve(res);
+      } else {
+        const res = JSON.parse(req.response);
+        options.error(res);
+        reject(res);
+      }
+    };
+
+    req.send(JSON.stringify(options.data));
+  });
+};
+
+_generateQuery = data => {
+  let query = '';
+
+  for (let el in data) {
+    if (data.hasOwnProperty(el))
+      query += el + '=' + data[el] + '&';
+  }
+
+  return query.substring(0, data.length - 1);
+};
+
+_registerDocReadyCB = cb => {
+  _docReady ? cb() : _docReadyCBs.push(cb);
+};
+
+_generateNodes = selector => {
+  let query = document.querySelectorAll(selector);
+  let nodes = Array.from(query);
+  return new DOMNodes(nodes);
+};
+
+document.addEventListener('DOMContentLoaded', () => {
+  _docReady = true;
+  _docReadyCBs.forEach(cb => cb());
+});
+
 class DOMNodes {
   constructor(nodes) {
     this.nodes = nodes;
@@ -10,6 +99,7 @@ class DOMNodes {
   html(string) {
     if (string !== undefined) {
       this.each(node => node.innerHTML = string);
+      return this;
     } else {
       return this.nodes[0].innerHTML;
     }
@@ -17,6 +107,7 @@ class DOMNodes {
 
   empty() {
     this.each(node => node.innerHTML = '');
+    return this;
   }
 
   remove() {
@@ -45,6 +136,8 @@ class DOMNodes {
         this.each(node => node.innerHTML += els);
         return;
     }
+    debugger
+    return this;
   }
 
   attr(name, value) {
@@ -53,18 +146,22 @@ class DOMNodes {
     } else {
       this.nodes[0].setAttribute(name, value);
     }
+    return this;
   }
 
   addClass(className) {
     this.each(node => node.classList.add(className));
+    return this;
   }
 
   removeClass(className) {
     this.each(node => node.classList.remove(className));
+    return this;
   }
 
   toggleClass(className) {
     this.each(node => node.classList.toggle(className));
+    return this;
   }
 
   children() {
@@ -134,5 +231,3 @@ class DOMNodes {
     return new DOMNodes(this.nodes);
   }
 }
-
-module.exports = DOMNodes;
