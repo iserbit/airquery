@@ -4,7 +4,7 @@
 
 AirQuery is a lightweight Javascript DOM manipulation library that implements only essential function in order to reduce file size and loading speed.
 
-Live Demo can be found here: [http://kevinkiklee.com/airquery]
+Live Demo of the event handler and AJAX requests can be found here: [http://kevinkiklee.com/airquery]
 
 ## Installation
 

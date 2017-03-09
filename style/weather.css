@@ -20,8 +20,8 @@ h1, h2, h3, h4 {
 }
 
 h2 {
-  padding-bottom: 25px;
-  color: #c6ff56;
+  font-size: 20px;
+  color: black;
 }
 
 h4 {
@@ -50,4 +50,30 @@ h4 {
 
 .center {
   text-align: center;
+}
+
+.btn-container {
+  display: flex;
+  justify-content: space-around;
+  margin-bottom: 25px;
+}
+
+.btn {
+  border: 5px rgba(255, 255, 255, 0.9) solid;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  padding: 10px;
+  transition: all 0.3s ease 0s;
+  background-color: rgba(255, 255, 255, 0.9)
+}
+
+.btn:hover {
+  transition: all 0.3s ease 0s;
+  background-color: rgba(255, 255, 255, 0.5)
+}
+
+.selected {
+  border: 5px #E16B5A solid;
 }
