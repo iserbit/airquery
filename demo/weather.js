@@ -45,11 +45,13 @@ const page = () => {
       method: 'get',
       url
     }).then((data) => {
-      weather.html(`<b>Current Weather</b><br>${data.weather[0].main}`);
-      currentTemperature.html(`<b>Current Temperature</b><br>${data.main.temp}&#8457<br>`);
-      maxTemperature.html(`<b>Max Temperature</b><br>${data.main.temp_max}&#8457<br>`);
-      minTemperature.html(`<b>Min Temperature</b><br>${data.main.temp_min}&#8457<br>`);
-      humidity.html(`<b>Humidity</b><br>${data.main.humidity}%`);
+      weather.html(``);
+      weather.append(`<div class='weatherImage'><img src='http://openweathermap.org/img/w/${data.weather[0].icon}.png'/></div>`);
+      weather.append(`<p><b>${data.weather[0].main}</b></p>`);
+      currentTemperature.html(`<b>Current</b> - ${data.main.temp}&#8457<br>`);
+      maxTemperature.html(`<b>Max</b> - ${data.main.temp_max}&#8457<br>`);
+      minTemperature.html(`<b>Min</b> - ${data.main.temp_min}&#8457<br>`);
+      humidity.html(`<b>Humidity</b> - ${data.main.humidity}%`);
 
       if (city === 'nyc' ) {
         nyc.addClass('selected');
