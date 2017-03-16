@@ -77,3 +77,18 @@ h4 {
 .selected {
   border: 5px #E16B5A solid;
 }
+
+.about-airquery {
+  margin-top: 15px;
+  font-size: 13px;
+}
+
+.about-airquery a {
+  color: white;
+  transition: all 0.3s ease 0s;
+}
+
+.about-airquery a:hover {
+  color: #E16B5A;
+  transition: all 0.3s ease 0s;
+}
