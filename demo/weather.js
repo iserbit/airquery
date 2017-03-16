@@ -35,8 +35,8 @@ const page = () => {
     let lon = -73.994065;
 
     if (city === 'sf') {
-      lat = 10.745141;
-      lon = -13.994065;
+      lat = 37.791111;
+      lon = -122.393995;
     }
 
     const url = `http://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&APPID=${apiKey}&units=imperial`;
@@ -59,9 +59,9 @@ const page = () => {
         sf.addClass('selected');
       }
     });
-  }
+  };
 
   fetchData(currentCity);
-}
+};
 
 $$(page);
