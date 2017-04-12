@@ -48,6 +48,7 @@ const page = () => {
       weather.html(``);
       weather.append(`<div class='weatherImage'><img src='http://openweathermap.org/img/w/${data.weather[0].icon}.png'/></div>`);
       weather.append(`<p><b>${data.weather[0].main}</b></p>`);
+
       currentTemperature.html(`<b>Current</b> - ${data.main.temp}&#8457<br>`);
       maxTemperature.html(`<b>Max</b> - ${data.main.temp_max}&#8457<br>`);
       minTemperature.html(`<b>Min</b> - ${data.main.temp_min}&#8457<br>`);
